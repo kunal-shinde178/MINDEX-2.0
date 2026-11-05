@@ -1,0 +1,1355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MINDEX 2.0 | Smart Student Portal</title>
+
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
+
+:root {
+  --primary: #2563eb;
+  --dark: #172554;
+  --light: #eff6ff;
+  --white: #ffffff;
+  --text: #1e293b;
+  --muted: #64748b;
+  --border: #dbeafe;
+  --green: #16a34a;
+  --red: #dc2626;
+}
+
+body {
+  background: #f1f5f9;
+  color: var(--text);
+  min-height: 100vh;
+}
+
+.hidden {
+  display: none !important;
+}
+
+button, input, select, textarea {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+}
+
+.login-screen {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: linear-gradient(135deg, #dbeafe, #eff6ff);
+}
+
+.login-card {
+  width: 100%;
+  max-width: 420px;
+  background: white;
+  padding: 32px;
+  border-radius: 20px;
+  box-shadow: 0 15px 40px rgba(30, 64, 175, .12);
+}
+
+.logo {
+  width: 65px;
+  height: 65px;
+  background: var(--primary);
+  color: white;
+  display: grid;
+  place-items: center;
+  border-radius: 18px;
+  font-size: 25px;
+  font-weight: bold;
+  margin-bottom: 18px;
+}
+
+.login-card h1 {
+  font-size: 27px;
+  color: var(--dark);
+}
+
+.subtitle {
+  color: var(--muted);
+  margin: 8px 0 25px;
+  font-size: 14px;
+}
+
+.field {
+  margin-bottom: 16px;
+}
+
+.field label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 7px;
+}
+
+.field input, .field select, .field textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  outline: none;
+  background: white;
+}
+
+.field input:focus, .field select:focus {
+  border-color: var(--primary);
+}
+
+.primary-btn {
+  background: var(--primary);
+  color: white;
+  padding: 12px 18px;
+  border-radius: 9px;
+  font-weight: 600;
+}
+
+.primary-btn:hover {
+  background: #1d4ed8;
+}
+
+.login-btn {
+  width: 100%;
+  margin-top: 8px;
+}
+
+.error {
+  color: var(--red);
+  font-size: 13px;
+  margin-top: 12px;
+}
+
+.demo-info {
+  background: var(--light);
+  padding: 12px;
+  border-radius: 9px;
+  margin-top: 20px;
+  font-size: 12px;
+  color: var(--dark);
+  line-height: 1.7;
+}
+
+/* MAIN APP */
+
+.app {
+  min-height: 100vh;
+  display: flex;
+}
+
+.sidebar {
+  width: 245px;
+  background: var(--dark);
+  color: white;
+  min-height: 100vh;
+  padding: 22px 15px;
+  flex-shrink: 0;
+}
+
+.brand {
+  font-size: 23px;
+  font-weight: bold;
+  padding: 8px 12px 25px;
+}
+
+.brand span {
+  color: #60a5fa;
+}
+
+.nav-label {
+  color: #93c5fd;
+  font-size: 11px;
+  padding: 15px 12px 8px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.nav-btn {
+  width: 100%;
+  padding: 12px;
+  color: #dbeafe;
+  background: transparent;
+  text-align: left;
+  border-radius: 8px;
+  margin: 3px 0;
+  font-size: 14px;
+}
+
+.nav-btn:hover, .nav-btn.active {
+  background: #1e40af;
+  color: white;
+}
+
+.main {
+  flex: 1;
+  min-width: 0;
+}
+
+.topbar {
+  height: 70px;
+  background: white;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 25px;
+}
+
+.topbar h2 {
+  font-size: 19px;
+}
+
+.user-info {
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.content {
+  padding: 25px;
+}
+
+.page {
+  display: none;
+}
+
+.page.active {
+  display: block;
+}
+
+.page-heading {
+  margin-bottom: 22px;
+}
+
+.page-heading h2 {
+  font-size: 23px;
+  color: var(--dark);
+}
+
+.page-heading p {
+  color: var(--muted);
+  font-size: 13px;
+  margin-top: 6px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 25px;
+}
+
+.stat-card {
+  background: white;
+  padding: 20px;
+  border-radius: 13px;
+  border: 1px solid var(--border);
+}
+
+.stat-card p {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.stat-card h2 {
+  margin-top: 10px;
+  font-size: 28px;
+  color: var(--dark);
+}
+
+.panel {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 13px;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.panel h3 {
+  margin-bottom: 17px;
+  font-size: 17px;
+}
+
+.toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 17px;
+}
+
+.search-box {
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  min-width: 220px;
+  outline: none;
+}
+
+.table-wrap {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 550px;
+}
+
+th, td {
+  padding: 12px;
+  border-bottom: 1px solid #e2e8f0;
+  text-align: left;
+  font-size: 13px;
+}
+
+th {
+  color: var(--muted);
+  background: #f8fafc;
+}
+
+.small-btn {
+  padding: 7px 10px;
+  border-radius: 6px;
+  font-size: 12px;
+  margin: 2px;
+}
+
+.edit-btn {
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+
+.delete-btn {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+.success-btn {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 15px;
+}
+
+.form-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.secondary-btn {
+  background: #e2e8f0;
+  color: #334155;
+  padding: 12px 18px;
+  border-radius: 9px;
+}
+
+.badge {
+  display: inline-block;
+  padding: 5px 9px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: bold;
+}
+
+.present {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.absent {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.pending {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.empty {
+  text-align: center;
+  color: var(--muted);
+  padding: 25px;
+}
+
+.profile-box {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.profile-photo {
+  width: 85px;
+  height: 85px;
+  border-radius: 50%;
+  object-fit: cover;
+  background: var(--light);
+}
+
+@media(max-width: 900px) {
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media(max-width: 650px) {
+  .app {
+    display: block;
+  }
+
+  .sidebar {
+    width: 100%;
+    min-height: auto;
+    padding: 10px;
+  }
+
+  .brand {
+    padding: 10px;
+  }
+
+  .nav-label {
+    display: none;
+  }
+
+  .sidebar nav {
+    display: flex;
+    overflow-x: auto;
+    gap: 5px;
+  }
+
+  .nav-btn {
+    width: auto;
+    white-space: nowrap;
+  }
+
+  .content {
+    padding: 15px;
+  }
+
+  .topbar {
+    padding: 0 15px;
+  }
+
+  .stats-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+  .stat-card {
+    padding: 14px;
+  }
+
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<!-- LOGIN SCREEN -->
+
+<section id="loginScreen" class="login-screen">
+  <div class="login-card">
+    <div class="logo">M</div>
+    <h1>MINDEX 2.0</h1>
+    <p class="subtitle">Smart Student Management Portal</p>
+
+    <div class="field">
+      <label>Login Role</label>
+      <select id="loginRole">
+        <option value="admin">Administrator</option>
+        <option value="student">Student</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label>Email Address</label>
+      <input type="email" id="loginEmail" placeholder="Enter email">
+    </div>
+
+    <div class="field hidden" id="rollField">
+      <label>Student Roll Number</label>
+      <input type="text" id="loginRoll" placeholder="Enter roll number">
+    </div>
+
+    <div class="field">
+      <label>Password</label>
+      <input type="password" id="loginPassword" placeholder="Enter password">
+    </div>
+
+    <button class="primary-btn login-btn" id="loginBtn">Login to Dashboard</button>
+    <p id="loginError" class="error"></p>
+
+    
+  </div>
+</section>
+
+<!-- MAIN APPLICATION -->
+
+<div id="app" class="app hidden">
+
+  <aside class="sidebar">
+    <div class="brand">MIN<span>DEX</span></div>
+
+    <nav id="adminNav">
+      <div class="nav-label">Main Menu</div>
+      <button class="nav-btn active" data-page="dashboard">▦ Dashboard</button>
+      <button class="nav-btn" data-page="students">♙ Students</button>
+      <button class="nav-btn" data-page="attendance">✓ Attendance</button>
+      <button class="nav-btn" data-page="marks">▤ Marks & Results</button>
+      <button class="nav-btn" data-page="reports">▥ Reports</button>
+    </nav>
+
+    <nav id="studentNav" class="hidden">
+      <div class="nav-label">Student Menu</div>
+      <button class="nav-btn active" data-page="myProfile">♙ My Profile</button>
+      <button class="nav-btn" data-page="myAttendance">✓ My Attendance</button>
+      <button class="nav-btn" data-page="myResults">▤ My Results</button>
+    </nav>
+
+    <div class="nav-label">Account</div>
+    <button class="nav-btn" id="logoutBtn">⇥ Logout</button>
+  </aside>
+
+  <main class="main">
+    <header class="topbar">
+      <h2 id="topTitle">Dashboard</h2>
+      <div class="user-info" id="welcomeText">Welcome, Admin</div>
+    </header>
+
+    <div class="content">
+
+      <!-- DASHBOARD -->
+
+      <section class="page active" id="dashboard">
+        <div class="page-heading">
+          <h2>Dashboard Overview</h2>
+          <p>Welcome to MINDEX Smart Student Portal.</p>
+        </div>
+
+        <div class="stats-grid">
+          <div class="stat-card">
+            <p>Total Students</p>
+            <h2 id="totalStudents">0</h2>
+          </div>
+          <div class="stat-card">
+            <p>Present Today</p>
+            <h2 id="presentCount">0</h2>
+          </div>
+          <div class="stat-card">
+            <p>Absent Today</p>
+            <h2 id="absentCount">0</h2>
+          </div>
+          <div class="stat-card">
+            <p>Attendance Rate</p>
+            <h2 id="attendanceRate">0%</h2>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h3>Recent Students</h3>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Roll No.</th>
+                  <th>Name</th>
+                  <th>Branch</th>
+                  <th>Year</th>
+                </tr>
+              </thead>
+              <tbody id="recentStudents"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- STUDENTS -->
+
+      <section class="page" id="students">
+        <div class="page-heading">
+          <h2>Student Management</h2>
+          <p>Add, edit, search and manage student records.</p>
+        </div>
+
+        <div class="panel">
+          <h3 id="studentFormTitle">Add New Student</h3>
+
+          <form id="studentForm">
+            <input type="hidden" id="editStudentId">
+
+            <div class="form-grid">
+              <div class="field">
+                <label>Full Name</label>
+                <input id="studentName" required placeholder="Student name">
+              </div>
+
+              <div class="field">
+                <label>Roll Number</label>
+                <input id="studentRoll" required placeholder="Roll number">
+              </div>
+
+              <div class="field">
+                <label>Email</label>
+                <input type="email" id="studentEmail" required placeholder="Email address">
+              </div>
+
+              <div class="field">
+                <label>Phone Number</label>
+                <input type="tel" id="studentPhone" placeholder="Phone number">
+              </div>
+
+              <div class="field">
+                <label>Branch</label>
+                <select id="studentBranch">
+                  <option value="CST">CST</option>
+                  <option value="CSE">CSE</option>
+                  <option value="IT">IT</option>
+                  <option value="ENTC">ENTC</option>
+                  <option value="AI & ML">AI & ML</option>
+                  <option value="Mechanical">Mechanical</option>
+                  <option value="Civil">Civil</option>
+                </select>
+              </div>
+
+              <div class="field">
+                <label>Academic Year</label>
+                <select id="studentYear">
+                  <option value="First Year">First Year</option>
+                  <option value="Second Year">Second Year</option>
+                  <option value="Third Year">Third Year</option>
+                  <option value="Final Year">Final Year</option>
+                </select>
+              </div>
+
+              <div class="field">
+                <label>Profile Photo (Optional)</label>
+                <input type="file" id="studentPhoto" accept="image/*">
+              </div>
+            </div>
+
+            <div class="form-actions">
+              <button class="primary-btn" type="submit" id="saveStudentBtn">Save Student</button>
+              <button class="secondary-btn" type="button" id="cancelEditBtn">Clear</button>
+            </div>
+          </form>
+        </div>
+
+        <div class="panel">
+          <div class="toolbar">
+            <h3>All Students</h3>
+            <input class="search-box" id="studentSearch" placeholder="Search students...">
+          </div>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Roll No.</th>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Branch</th>
+                  <th>Year</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="studentTable"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ATTENDANCE -->
+
+      <section class="page" id="attendance">
+        <div class="page-heading">
+          <h2>Attendance Management</h2>
+          <p>Record daily student attendance.</p>
+        </div>
+
+        <div class="panel">
+          <div class="toolbar">
+            <div class="field">
+              <label>Select Date</label>
+              <input type="date" id="attendanceDate">
+            </div>
+            <button class="primary-btn" id="saveAttendanceBtn">Save Attendance</button>
+          </div>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Roll No.</th>
+                  <th>Student Name</th>
+                  <th>Attendance Status</th>
+                </tr>
+              </thead>
+              <tbody id="attendanceTable"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- MARKS -->
+
+      <section class="page" id="marks">
+        <div class="page-heading">
+          <h2>Marks & Results</h2>
+          <p>Manage student examination marks.</p>
+        </div>
+
+        <div class="panel">
+          <h3>Add Examination Marks</h3>
+
+          <form id="marksForm">
+            <div class="form-grid">
+              <div class="field">
+                <label>Student</label>
+                <select id="marksStudent" required></select>
+              </div>
+
+              <div class="field">
+                <label>Subject</label>
+                <input id="marksSubject" required placeholder="Subject name">
+              </div>
+
+              <div class="field">
+                <label>Obtained Marks</label>
+                <input type="number" id="obtainedMarks" min="0" required>
+              </div>
+
+              <div class="field">
+                <label>Maximum Marks</label>
+                <input type="number" id="maximumMarks" min="1" required>
+              </div>
+            </div>
+
+            <button class="primary-btn" type="submit">Save Marks</button>
+          </form>
+        </div>
+
+        <div class="panel">
+          <h3>Examination Records</h3>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Student</th>
+                  <th>Subject</th>
+                  <th>Marks</th>
+                  <th>Percentage</th>
+                  <th>Grade</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="marksTable"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- REPORTS -->
+
+      <section class="page" id="reports">
+        <div class="page-heading">
+          <h2>Reports & Analytics</h2>
+          <p>View and export student information.</p>
+        </div>
+
+        <div class="stats-grid">
+          <div class="stat-card">
+            <p>Total Students</p>
+            <h2 id="reportStudents">0</h2>
+          </div>
+          <div class="stat-card">
+            <p>Total Marks Records</p>
+            <h2 id="reportMarks">0</h2>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h3>Export Data</h3>
+          <button class="primary-btn" id="exportStudentsBtn">Export Students CSV</button>
+          <button class="primary-btn" id="exportAttendanceBtn">Export Attendance CSV</button>
+          <button class="primary-btn" id="exportMarksBtn">Export Marks CSV</button>
+        </div>
+      </section>
+
+      <!-- STUDENT PROFILE -->
+
+      <section class="page" id="myProfile">
+        <div class="page-heading">
+          <h2>My Profile</h2>
+          <p>Your personal academic information.</p>
+        </div>
+
+        <div class="panel">
+          <div class="profile-box">
+            <img id="myPhoto" class="profile-photo" alt="Student photo">
+            <div>
+              <h2 id="myName">Student Name</h2>
+              <p id="myRoll">Roll Number</p>
+            </div>
+          </div>
+          <hr style="margin:20px 0;border:0;border-top:1px solid #e2e8f0">
+          <div id="profileDetails"></div>
+        </div>
+      </section>
+
+      <!-- STUDENT ATTENDANCE -->
+
+      <section class="page" id="myAttendance">
+        <div class="page-heading">
+          <h2>My Attendance</h2>
+          <p>Your attendance records.</p>
+        </div>
+        <div class="panel">
+          <div id="myAttendanceSummary"></div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="myAttendanceTable"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- STUDENT RESULTS -->
+
+      <section class="page" id="myResults">
+        <div class="page-heading">
+          <h2>My Results</h2>
+          <p>Your examination performance.</p>
+        </div>
+        <div class="panel">
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Subject</th>
+                  <th>Marks</th>
+                  <th>Percentage</th>
+                  <th>Grade</th>
+                </tr>
+              </thead>
+              <tbody id="myResultsTable"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+</div>
+<script>
+"use strict";
+
+/* =====================================
+   MINDEX 2.0 - APPLICATION CORE
+===================================== */
+
+const $ = id => document.getElementById(id);
+
+let students = JSON.parse(localStorage.getItem("mindex_students") || "[]");
+let attendance = JSON.parse(localStorage.getItem("mindex_attendance") || "[]");
+let marks = JSON.parse(localStorage.getItem("mindex_marks") || "[]");
+
+let currentUser = null;
+let currentRole = null;
+let editingPhoto = "";
+
+/* SAVE DATA */
+
+function saveData() {
+  localStorage.setItem("mindex_students", JSON.stringify(students));
+  localStorage.setItem("mindex_attendance", JSON.stringify(attendance));
+  localStorage.setItem("mindex_marks", JSON.stringify(marks));
+}
+
+/* HELPERS */
+
+function today() {
+  return new Date().toISOString().split("T")[0];
+}
+
+function escapeHTML(value) {
+  return String(value ?? "").replace(/[&<>"']/g, char => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#39;"
+  })[char]);
+}
+
+function showMessage(message) {
+  alert(message);
+}
+
+function getStudent(id) {
+  return students.find(student => student.id === id);
+}
+
+function grade(percent) {
+  if (percent >= 90) return "A+";
+  if (percent >= 80) return "A";
+  if (percent >= 70) return "B";
+  if (percent >= 60) return "C";
+  if (percent >= 40) return "D";
+  return "F";
+}
+
+/* LOGIN ROLE CHANGE */
+
+$("loginRole").addEventListener("change", function() {
+  const isStudent = this.value === "student";
+  $("rollField").classList.toggle("hidden", !isStudent);
+  $("loginError").textContent = "";
+});
+
+/* LOGIN */
+
+function login() {
+  const role = $("loginRole").value;
+  const email = $("loginEmail").value.trim().toLowerCase();
+  const password = $("loginPassword").value;
+  const roll = $("loginRoll").value.trim().toLowerCase();
+
+  $("loginError").textContent = "";
+
+  if (!email || !password) {
+    $("loginError").textContent = "Please enter email and password.";
+    return;
+  }
+
+  if (role === "admin") {
+    if (email !== "mindex@gmail.com" || password !== "Kunal@178") {
+      $("loginError").textContent = "Invalid admin login details.";
+      return;
+    }
+
+    currentRole = "admin";
+    currentUser = { name: "Administrator" };
+
+  } else {
+    if (!roll || password !== "123456") {
+      $("loginError").textContent = "Enter valid roll number and password.";
+      return;
+    }
+
+    const student = students.find(s =>
+      String(s.roll).toLowerCase() === roll
+    );
+
+    if (!student) {
+      $("loginError").textContent = "Student not found. Contact admin.";
+      return;
+    }
+
+    if (student.email.toLowerCase() !== email) {
+      $("loginError").textContent = "Email does not match this student.";
+      return;
+    }
+
+    currentRole = "student";
+    currentUser = student;
+  }
+
+  $("loginScreen").classList.add("hidden");
+  $("app").classList.remove("hidden");
+
+  $("adminNav").classList.toggle("hidden", currentRole !== "admin");
+  $("studentNav").classList.toggle("hidden", currentRole !== "student");
+
+  $("welcomeText").textContent = "Welcome, " + currentUser.name;
+
+  if (currentRole === "admin") {
+    openPage("dashboard");
+    refreshAll();
+  } else {
+    openPage("myProfile");
+    refreshStudent();
+  }
+}
+
+$("loginBtn").addEventListener("click", login);
+
+$("loginPassword").addEventListener("keydown", event => {
+  if (event.key === "Enter") login();
+});
+
+/* LOGOUT */
+
+$("logoutBtn").addEventListener("click", function() {
+  currentUser = null;
+  currentRole = null;
+
+  $("app").classList.add("hidden");
+  $("loginScreen").classList.remove("hidden");
+
+  $("loginEmail").value = "";
+  $("loginPassword").value = "";
+  $("loginRoll").value = "";
+  $("loginError").textContent = "";
+  $("loginRole").value = "admin";
+  $("rollField").classList.add("hidden");
+});
+
+/* NAVIGATION */
+
+function openPage(pageId) {
+  document.querySelectorAll(".page").forEach(page => {
+    page.classList.remove("active");
+  });
+
+  const selected = $(pageId);
+
+  if (!selected) return;
+
+  selected.classList.add("active");
+
+  document.querySelectorAll(".nav-btn[data-page]").forEach(button => {
+    button.classList.toggle(
+      "active",
+      button.dataset.page === pageId
+    );
+  });
+
+  const titles = {
+    dashboard: "Dashboard",
+    students: "Students",
+    attendance: "Attendance",
+    marks: "Marks & Results",
+    reports: "Reports",
+    myProfile: "My Profile",
+    myAttendance: "My Attendance",
+    myResults: "My Results"
+  };
+
+  $("topTitle").textContent = titles[pageId] || "MINDEX";
+}
+
+document.querySelectorAll(".nav-btn[data-page]").forEach(button => {
+  button.addEventListener("click", function() {
+    const page = this.dataset.page;
+
+    openPage(page);
+
+    if (currentRole === "admin") {
+      refreshAll();
+    } else {
+      refreshStudent();
+    }
+  });
+});
+
+/* STUDENT FORM */
+
+$("studentForm").addEventListener("submit", function(event) {
+  event.preventDefault();
+
+  const id = $("editStudentId").value;
+
+  const name = $("studentName").value.trim();
+  const roll = $("studentRoll").value.trim();
+  const email = $("studentEmail").value.trim().toLowerCase();
+
+  if (!name || !roll || !email) {
+    showMessage("Please fill all required fields.");
+    return;
+  }
+
+  const duplicate = students.find(student =>
+    student.roll.toLowerCase() === roll.toLowerCase() &&
+    student.id !== id
+  );
+
+  if (duplicate) {
+    showMessage("This roll number already exists.");
+    return;
+  }
+
+  const duplicateEmail = students.find(student =>
+    student.email.toLowerCase() === email &&
+    student.id !== id
+  );
+
+  if (duplicateEmail) {
+    showMessage("This email is already registered.");
+    return;
+  }
+
+  const file = $("studentPhoto").files[0];
+
+  function finishSave(photo) {
+    const studentData = {
+      id: id || String(Date.now()),
+      name,
+      roll,
+      email,
+      phone: $("studentPhone").value.trim(),
+      branch: $("studentBranch").value,
+      year: $("studentYear").value,
+      photo: photo || ""
+    };
+
+    if (id) {
+      const index = students.findIndex(student => student.id === id);
+
+      if (index !== -1) {
+        studentData.photo = photo || students[index].photo || "";
+        students[index] = studentData;
+      }
+    } else {
+      students.push(studentData);
+    }
+
+    saveData();
+    resetStudentForm();
+    refreshAll();
+
+    showMessage(id ? "Student updated successfully!" : "Student added successfully!");
+  }
+
+  if (file) {
+    if (!file.type.startsWith("image/")) {
+      showMessage("Please select a valid image.");
+      return;
+    }
+
+    if (file.size > 1024 * 1024) {
+      showMessage("Photo must be smaller than 1 MB.");
+      return;
+    }
+
+    const reader = new FileReader();
+
+    reader.onload = () => finishSave(reader.result);
+    reader.onerror = () => showMessage("Unable to read photo.");
+
+    reader.readAsDataURL(file);
+  } else {
+    finishSave("");
+  }
+});
+
+/* RESET STUDENT FORM */
+
+function resetStudentForm() {
+  $("studentForm").reset();
+  $("editStudentId").value = "";
+  $("studentFormTitle").textContent = "Add New Student";
+  $("saveStudentBtn").textContent = "Save Student";
+  editingPhoto = "";
+}
+
+$("cancelEditBtn").addEventListener("click", resetStudentForm);
+
+/* DISPLAY STUDENTS */
+
+function renderStudents(search = "") {
+  const filtered = students.filter(student => {
+    const text = (
+      student.name + " " +
+      student.roll + " " +
+      student.email + " " +
+      student.branch
+    ).toLowerCase();
+
+    return text.includes(search.toLowerCase());
+  });
+
+  if (!filtered.length) {
+    $("studentTable").innerHTML =
+      '<tr><td colspan="6" class="empty">No students found.</td></tr>';
+    return;
+  }
+
+  $("studentTable").innerHTML = filtered.map(student => `
+    <tr>
+      <td>${escapeHTML(student.roll)}</td>
+      <td>${escapeHTML(student.name)}</td>
+      <td>${escapeHTML(student.email)}</td>
+      <td>${escapeHTML(student.branch)}</td>
+      <td>${escapeHTML(student.year)}</td>
+      <td>
+        <button class="small-btn edit-btn"
+          onclick="editStudent('${student.id}')">Edit</button>
+        <button class="small-btn delete-btn"
+          onclick="deleteStudent('${student.id}')">Delete</button>
+      </td>
+    </tr>
+  `).join("");
+}
+
+$("studentSearch").addEventListener("input", function() {
+  renderStudents(this.value);
+});
+
+/* EDIT STUDENT */
+
+function editStudent(id) {
+  const student = getStudent(id);
+
+  if (!student) return;
+
+  $("editStudentId").value = student.id;
+  $("studentName").value = student.name;
+  $("studentRoll").value = student.roll;
+  $("studentEmail").value = student.email;
+  $("studentPhone").value = student.phone || "";
+  $("studentBranch").value = student.branch;
+  $("studentYear").value = student.year;
+
+  editingPhoto = student.photo || "";
+
+  $("studentFormTitle").textContent = "Edit Student";
+  $("saveStudentBtn").textContent = "Update Student";
+
+  $("studentForm").scrollIntoView({ behavior: "smooth" });
+}
+
+/* DELETE STUDENT */
+
+function deleteStudent(id) {
+  const student = getStudent(id);
+
+  if (!student) return;
+
+  if (!confirm("Delete " + student.name + "?")) return;
+
+  students = students.filter(s => s.id !== id);
+  attendance = attendance.filter(a => a.studentId !== id);
+  marks = marks.filter(m => m.studentId !== id);
+
+  saveData();
+  refreshAll();
+
+  showMessage("Student deleted successfully.");
+}
+
+/* MARKS STUDENT OPTIONS */
+
+function renderMarksOptions() {
+  $("marksStudent").innerHTML =
+    '<option value="">Select Student</option>' +
+    students.map(student => `
+      <option value="${student.id}">
+        ${escapeHTML(student.roll)} - ${escapeHTML(student.name)}
+      </option>
+    `).join("");
+}
+
+/* MARKS FORM */
+
+$("marksForm").addEventListener("submit", function(event) {
+  event.preventDefault();
+
+  const studentId = $("marksStudent").value;
+  const subject = $("marksSubject").value.trim();
+  const obtained = Number($("obtainedMarks").value);
+  const maximum = Number($("maximumMarks").value);
+
+  if (!studentId || !subject) {
+    showMessage("Please select a student and subject.");
+    return;
+  }
+
+  if (
+    !Number.isFinite(obtained) ||
+    !Number.isFinite(maximum) ||
+    maximum <= 0 ||
+    obtained < 0 ||
+    obtained > maximum
+  ) {
+    showMessage("Enter valid marks. Obtained marks cannot exceed maximum marks.");
+    return;
+  }
+
+  marks.push({
+    id: String(Date.now()),
+    studentId,
+    subject,
+    obtained,
+    maximum
+  });
+
+  saveData();
+  $("marksForm").reset();
+  refreshAll();
+
+  showMessage("Marks saved successfully!");
+});
+
+/* DISPLAY MARKS */
+
+function renderMarks() {
+  if (!marks.length) {
+    $("marksTable").innerHTML =
+      '<tr><td colspan="6" class="empty">No marks records found.</td></tr>';
+    return;
+  }
+
+  $("marksTable").innerHTML = marks.map(mark => {
+    const student = getStudent(mark.studentId);
+    const percentage = (mark.obtained / mark.maximum) * 100;
+
+    return `
+      <tr>
+        <td>${escapeHTML(student ? student.name : "Deleted Student")}</td>
+        <td>${escapeHTML(mark.subject)}</td>
+        <td>${mark.obtained}/${mark.maximum}</td>
+        <td>${percentage.toFixed(1)}%</td>
+        <td>${grade(percentage)}</td>
+        <td>
+          <button class="small-btn delete-btn"
+            onclick="deleteMark('${mark.id}')">Delete</button>
+        </td>
+      </tr>
+    `;
+  }).join("");
+}
+
+/* DELETE MARK */
+
+function deleteMark(id) {
+  if (!confirm("Delete this marks record?")) return;
+
+  marks = marks.filter(mark => mark.id !== id);
+
+  saveData();
+  refreshAll();
+
+  showMessage("Marks record deleted.");
+}
+
+/* END OF PART 2 */
+    </script>
+    
